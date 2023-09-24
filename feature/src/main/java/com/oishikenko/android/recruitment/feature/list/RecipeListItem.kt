@@ -54,10 +54,7 @@ fun RecipeListItem(
                     .fillMaxWidth()
                     .padding(start = 8.dp),
             )
-
         }
-//
-
     }
 }
 

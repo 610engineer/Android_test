@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -46,6 +47,18 @@ fun RecipeListScreen(
                 .padding(innerPadding)
                 .consumedWindowInsets(innerPadding)
         ) {
+            if(cookingRecords.isEmpty()){
+                item{
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
             items(cookingRecords) {
                 RecipeListItem(it)
             }
