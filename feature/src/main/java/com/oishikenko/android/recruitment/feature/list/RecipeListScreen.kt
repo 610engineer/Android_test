@@ -3,6 +3,7 @@ package com.oishikenko.android.recruitment.feature.list
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -58,6 +59,7 @@ fun RecipeListScreen(
                 .padding(innerPadding)
                 .consumedWindowInsets(innerPadding)
         ) {
+            //cookingRecordsが空の時ローディングを表示
             if(cookingRecords.isEmpty()){
                 item{
                     Box(
@@ -68,12 +70,16 @@ fun RecipeListScreen(
                             .wrapContentWidth(align = Alignment.CenterHorizontally)
                             .wrapContentHeight(align = Alignment.CenterVertically)
                     ) {
-                        CustomCircularProgressIndicator()
+                        CustomCircularProgressIndicator(
+                            color = Color.Blue,
+                            strokeWidth = 8.dp
+                        )
                     }
                 }
-            }
-            items(cookingRecords) {
-                RecipeListItem(it)
+            }else{
+                items(cookingRecords) {
+                    RecipeListItem(it)
+                }
             }
         }
     }
@@ -88,6 +94,8 @@ fun PreviewRecipeListScreen(){
     }
 }
 
+// StrokeCapの指定ができないので、progressIndicator.ktの一部を流用
+// StrokeCapをRoundにして角を丸くする
 @Composable
 fun CustomCircularProgressIndicator(
     modifier: Modifier = Modifier,
