@@ -50,7 +50,7 @@ fun RecipeListScreen(
         composable("main") {
             ListRecipes(cookingRecords,navController)
         }
-        composable("detailScreen/{description}/{date}",
+        composable("detailScreen/{description}/{date}/{imageUrl}/",
         arguments = listOf(
 //            navArgument("imageUrl"){
 //                type= NavType.StringType
@@ -63,6 +63,11 @@ fun RecipeListScreen(
                 nullable = true
             },
             navArgument("date"){
+                type= NavType.StringType
+                defaultValue = ""
+                nullable = true
+            },
+            navArgument("imageUrl"){
                 type= NavType.StringType
                 defaultValue = ""
                 nullable = true
@@ -99,7 +104,7 @@ private fun ListRecipes(cookingRecords:List<CookingRecord>, navController: NavCo
         ) {
             //cookingRecordsが空の時ローディングを表示
             if(cookingRecords.isEmpty()){
-                item{
+                item(){
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()

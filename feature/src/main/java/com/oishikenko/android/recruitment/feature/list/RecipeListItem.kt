@@ -25,15 +25,18 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.oishikenko.android.recruitment.data.model.CookingRecord
 import com.oishikenko.android.recruitment.feature.R
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun RecipeListItem(
     cookingRecord: CookingRecord,
     navController: NavController
 ) {
+    val url = URLEncoder.encode(cookingRecord.imageUrl, StandardCharsets.UTF_8.toString())
     Column(
         modifier = Modifier.clickable {
-            navController.navigate("detailScreen/${cookingRecord.comment}/${cookingRecord.recordedAt}")
+            navController.navigate("detailScreen/${cookingRecord.comment}/${cookingRecord.recordedAt}/${url}/")
         }
     ){
         Row(
