@@ -27,6 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.oishikenko.android.recruitment.data.model.CookingRecord
 import com.oishikenko.android.recruitment.feature.R
 import kotlin.math.PI
 import kotlin.math.abs
@@ -38,6 +45,37 @@ fun RecipeListScreen(
     viewModel: RecipeListViewModel = hiltViewModel()
 ) {
     val cookingRecords by viewModel.cookingRecords.collectAsStateWithLifecycle()
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "main"){
+        composable("main") {
+            ListRecipes(cookingRecords,navController)
+        }
+        composable("detailScreen/{description}/{date}",
+        arguments = listOf(
+//            navArgument("imageUrl"){
+//                type= NavType.StringType
+//                defaultValue = ""
+//                nullable = true
+//            },
+            navArgument("description"){
+                type= NavType.StringType
+                defaultValue = ""
+                nullable = true
+            },
+            navArgument("date"){
+                type= NavType.StringType
+                defaultValue = ""
+                nullable = true
+            },
+        )) {
+            DetailScreen(navController)
+            }
+        }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun ListRecipes(cookingRecords:List<CookingRecord>, navController: NavController){
     Scaffold(
         topBar = {
             val imagePainter = painterResource(id = R.drawable.header)
@@ -78,7 +116,7 @@ fun RecipeListScreen(
                 }
             }else{
                 items(cookingRecords) {
-                    RecipeListItem(it)
+                    RecipeListItem(it, navController)
                 }
             }
         }

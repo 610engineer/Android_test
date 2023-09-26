@@ -3,6 +3,7 @@ package com.oishikenko.android.recruitment.feature.list
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,67 +21,65 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.oishikenko.android.recruitment.data.model.CookingRecord
 import com.oishikenko.android.recruitment.feature.R
 
 @Composable
 fun RecipeListItem(
-    cookingRecord: CookingRecord
+    cookingRecord: CookingRecord,
+    navController: NavController
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp)
-            .padding(top = 8.dp, bottom = 8.dp)
-            .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
-
-    ) {
-        AsyncImage(
-            model = cookingRecord.imageUrl,
-            contentDescription = cookingRecord.comment,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(96.dp)
-                .clip(RoundedCornerShape(4.dp)),
-        )
-        Column(
-            modifier = Modifier
-                .padding(top = 25.dp)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            //料理タイプ
-            Text(
-            text = convertTypeToJP(cookingRecord.recipeType),
+    Column(
+        modifier = Modifier.clickable {
+            navController.navigate("detailScreen/${cookingRecord.comment}/${cookingRecord.recordedAt}")
+        }
+    ){
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontWeight = FontWeight.Bold
-            )
-            //登録日
-            Text(
-                text = cookingRecord.recordedAt,
+                .padding(start = 16.dp, end = 16.dp)
+                .padding(top = 8.dp, bottom = 8.dp)
+                .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
+
+        ) {
+            AsyncImage(
+                model = cookingRecord.imageUrl,
+                contentDescription = cookingRecord.comment,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp),
+                    .size(96.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             )
+            Column(
+                modifier = Modifier
+                    .padding(top = 25.dp)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                //料理タイプ
+                Text(
+                    text = convertTypeToJP(cookingRecord.recipeType),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold
+                )
+                //登録日
+                Text(
+                    text = cookingRecord.recordedAt,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
+                )
+            }
         }
     }
+
 }
 
-@Preview
-@Composable
-fun PreviewRecipeListItem() {
-    RecipeListItem(
-        cookingRecord = CookingRecord(
-            imageUrl= "",
-            comment = "豚肉のコクとごぼうの香り、野菜の甘みで奥行きのある味わい。",
-            recipeType = "soup",
-            recordedAt = "2018-05-01 17:57:31"
-        )
-    )
-}
+
 //料理タイプを日本語に変換
 fun convertTypeToJP(recipeType : String) : String{
     var convertedType = ""
