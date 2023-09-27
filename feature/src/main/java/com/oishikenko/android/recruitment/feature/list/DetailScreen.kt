@@ -7,15 +7,18 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.oishikenko.android.recruitment.feature.R
+import java.text.SimpleDateFormat
 
 @Composable
 fun DetailScreen(
@@ -26,16 +29,12 @@ fun DetailScreen(
 ) {
     Scaffold(
         topBar = {
-            val imagePainter = painterResource(id = R.drawable.header)
             TopAppBar(
                 backgroundColor = Color.White
             ) {
-                Image(
-                    painter = imagePainter,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
+                Text(
+                    text = "レシピ",
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
@@ -43,7 +42,6 @@ fun DetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp)
                 .padding(top = 8.dp, bottom = 8.dp)
 
         ) {
@@ -51,24 +49,40 @@ fun DetailScreen(
             AsyncImage(
                 model = imageUrl,
                 contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(96.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.Fit,
             )
 
             // description
             if (description != null) {
                 Text(
-                    text = description
+                    modifier = Modifier
+                        .padding(16.dp),
+                    text = description,
+
                 )
             }
             // date
             if (date != null) {
                 Text(
-                    text = date
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp)
+                        .fillMaxWidth(),
+                    text = convertTimeFormat(date),
+                    textAlign = TextAlign.End
                 )
             }
         }
     }
+}
+
+//登録時間表示形式変更
+private fun convertTimeFormat(date: String): String {
+    //dateに変換
+    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    var convertedDate = formatter.parse(date)
+
+    //formatを変えてStringに変換
+    val convertedFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
+    return convertedFormat.format(convertedDate)
 }

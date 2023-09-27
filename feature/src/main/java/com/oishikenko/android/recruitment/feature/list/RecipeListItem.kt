@@ -1,32 +1,28 @@
 package com.oishikenko.android.recruitment.feature.list
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.oishikenko.android.recruitment.data.model.CookingRecord
-import com.oishikenko.android.recruitment.feature.R
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun RecipeListItem(
@@ -34,6 +30,7 @@ fun RecipeListItem(
     navController: NavController
 ) {
     val url = URLEncoder.encode(cookingRecord.imageUrl, StandardCharsets.UTF_8.toString())
+    val recordedAt = convertTimeFormat(cookingRecord.recordedAt)
     Column(
         modifier = Modifier.clickable {
             navController.navigate("detailScreen/${cookingRecord.comment}/${cookingRecord.recordedAt}/${url}/")
@@ -71,7 +68,7 @@ fun RecipeListItem(
                 )
                 //登録日
                 Text(
-                    text = cookingRecord.recordedAt,
+                    text = convertTimeFormat(cookingRecord.recordedAt),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 8.dp),
@@ -92,4 +89,15 @@ fun convertTypeToJP(recipeType : String) : String{
         "side_dish" -> convertedType = "副菜"
     }
     return convertedType
+}
+
+//登録時間表示形式変更
+private fun convertTimeFormat(date: String): String {
+    //dateに変換
+    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    var convertedDate = formatter.parse(date)
+
+    //formatを変えてStringに変換
+    val convertedFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
+    return convertedFormat.format(convertedDate)
 }
