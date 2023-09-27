@@ -19,12 +19,11 @@ import com.oishikenko.android.recruitment.feature.R
 
 @Composable
 fun DetailScreen(
-    navController: NavController
+    navController: NavController,
+    imageUrl: String?,
+    description: String?,
+    date: String?
 ) {
-    val navBackStackEntry = navController.previousBackStackEntry
-    val imageUrl = navBackStackEntry?.arguments?.getString("image")
-    val description = navBackStackEntry?.arguments?.getString("description")
-    val date = navBackStackEntry?.arguments?.getString("date")
     Scaffold(
         topBar = {
             val imagePainter = painterResource(id = R.drawable.header)

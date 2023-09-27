@@ -51,29 +51,26 @@ fun RecipeListScreen(
             ListRecipes(cookingRecords,navController)
         }
         composable("detailScreen/{description}/{date}/{imageUrl}/",
-        arguments = listOf(
-//            navArgument("imageUrl"){
-//                type= NavType.StringType
-//                defaultValue = ""
-//                nullable = true
-//            },
-            navArgument("description"){
-                type= NavType.StringType
-                defaultValue = ""
-                nullable = true
-            },
-            navArgument("date"){
-                type= NavType.StringType
-                defaultValue = ""
-                nullable = true
-            },
-            navArgument("imageUrl"){
-                type= NavType.StringType
-                defaultValue = ""
-                nullable = true
-            },
-        )) {
-            DetailScreen(navController)
+            arguments = listOf(
+                navArgument("description"){
+                    type= NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument("date"){
+                    type= NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument("imageUrl"){
+                    type= NavType.StringType
+                    defaultValue = ""
+                },
+            )
+        ) { backStackEntry ->
+                DetailScreen(navController,
+                    backStackEntry.arguments?.getString("imageUrl"),
+                    backStackEntry.arguments?.getString("description"),
+                    backStackEntry.arguments?.getString("date")
+                )
             }
         }
 }
